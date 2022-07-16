@@ -1,0 +1,6 @@
+name: MinecraftDiscordAnnouncer
+version: '${project.version}'
+main: com.imdamilan.minecraftdiscordannouncer.MinecraftDiscordAnnouncer
+api-version: 1.16
+authors: [ ImDaMilan ]
+description: A plugin that announces when a Minecraft server turns on/off inside of a Discord server!
