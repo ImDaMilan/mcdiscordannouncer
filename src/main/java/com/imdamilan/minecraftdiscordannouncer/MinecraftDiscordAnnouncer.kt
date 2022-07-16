@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.internal.entities.EntityBuilder
+import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.java.JavaPlugin
 import java.awt.Color
 
@@ -35,6 +36,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             logger.severe("Error while initializing bot: $e")
             logger.severe("If this is your first time running this plugin, please make sure you have the correct credentials in the config.yml file.")
         }
+        Metrics(this, 15802)
     }
 
     private fun initConfig() {
