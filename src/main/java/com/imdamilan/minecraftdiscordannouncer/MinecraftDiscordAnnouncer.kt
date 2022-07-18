@@ -23,7 +23,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         Metrics(this, 15802)
         initConfig()
         if (configFile.getBoolean("discord.bot.enabled")) initBot()
-        if (configFile.getBoolean("bot.webhook.enabled")) initWebhook()
+        if (configFile.getBoolean("discord.webhook.enabled")) initWebhook()
     }
 
     override fun onDisable() {
