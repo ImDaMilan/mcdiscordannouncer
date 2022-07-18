@@ -13,7 +13,7 @@
 
     <description>A plugin that announces when a Minecraft server turns on/off inside a Discord server!</description>
     <properties>
-        <java.version>8</java.version>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.7.0</kotlin.version>
     </properties>
@@ -62,7 +62,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>8</jvmTarget>
+                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
             </plugin>
             <plugin>
