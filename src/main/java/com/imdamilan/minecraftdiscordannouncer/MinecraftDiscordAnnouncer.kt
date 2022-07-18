@@ -28,7 +28,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
 
     override fun onDisable() {
         if (configFile.getBoolean("discord.bot.enabled")) disableBot()
-        if (configFile.getBoolean("bot.webhook.enabled")) disableWebhook()
+        if (configFile.getBoolean("discord.webhook.enabled")) disableWebhook()
     }
 
     private fun initConfig() {
@@ -74,7 +74,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-on")!!)
-            .color(Color.GREEN.hashCode())
+            .color(65280)
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
@@ -105,7 +105,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-off")!!)
-            .color(Color.RED.hashCode())
+            .color(16711680)
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
