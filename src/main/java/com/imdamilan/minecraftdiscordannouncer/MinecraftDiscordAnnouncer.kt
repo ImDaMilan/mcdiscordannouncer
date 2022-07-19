@@ -79,7 +79,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             }
 
             embed.setTitle(configFile.getString("messages.announcement-on")!!)
-            embed.setColor(Color.getColor(configFile.getString("messages.color-on")!!))
+            embed.setColor(Color.getColor(Colors.valueOf(configFile.getString("messages.color-on")!!).getNM()))
 
             jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
                 .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
@@ -124,7 +124,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             }
 
             embed.setTitle(configFile.getString("messages.announcement-off")!!)
-            embed.setColor(Color.GREEN)
+            embed.setColor(Color.getColor(Colors.valueOf(configFile.getString("messages.color-off")!!).getNM()))
             jda?.getGuildById(configFile.getString("discord.bot.server-id")!!)
                 ?.getTextChannelById(configFile.getString("discord.bot.channel-id")!!)
                 ?.sendMessageEmbeds(embed.build())!!.queue()
@@ -161,19 +161,23 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
     }
 }
 
-enum class Colors(private val value: Int) {
-    GREEN(65280),
-    RED(16711680),
-    BLUE(24539),
-    YELLOW(16776960),
-    PURPLE(11403519),
-    ORANGE(16756224),
-    PINK(16761035),
-    LIME(7864064),
-    MAGENTA(16711935),
-    GOLD(13938487);
+enum class Colors(private val value: Int, private val nm: String) {
+    GREEN(65280, "#00FF00"),
+    RED(16711680, "#FF0000"),
+    BLUE(24539, "#0000FF"),
+    YELLOW(16776960, "#FFFF00"),
+    PURPLE(11403519, "#800080"),
+    ORANGE(16756224, "#FF7F00"),
+    PINK(16761035, "#FFC0CB"),
+    LIME(7864064, "#BFFF00"),
+    MAGENTA(16711935, "#FF00FF"),
+    GOLD(13938487, "#D4AF37");
 
     fun getColorInt(): Int {
         return value
+    }
+
+    fun getNM(): String {
+        return nm
     }
 }
