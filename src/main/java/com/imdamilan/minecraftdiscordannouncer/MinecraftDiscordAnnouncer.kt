@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.internal.entities.EntityBuilder
 import org.bstats.bukkit.Metrics
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.awt.Color
 
@@ -144,18 +143,16 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
                 .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
                 .build())
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, {
-            val embed = DiscordEmbed.builder()
-                .title(configFile.getString("messages.announcement-off")!!)
-                .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
-                .build()
-            val message = DiscordMessage.builder()
-                .embeds(listOf(embed))
-                .username(configFile.getString("discord.webhook.username")!!)
-                .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
-                .build()
-            webhook.sendMessage(message)
-        }, 15L)
+        val embed = DiscordEmbed.builder()
+             .title(configFile.getString("messages.announcement-off")!!)
+            .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
+            .build()
+        val message = DiscordMessage.builder()
+            .embeds(listOf(embed))
+            .username(configFile.getString("discord.webhook.username")!!)
+            .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
+            .build()
+        webhook.sendMessage(message)
     }
 }
 
