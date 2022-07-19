@@ -1,5 +1,6 @@
 package com.imdamilan.minecraftdiscordannouncer
 
+import com.imdamilan.minecraftdiscordannouncer.Colors.*
 import com.mrpowergamerbr.temmiewebhook.DiscordEmbed
 import com.mrpowergamerbr.temmiewebhook.DiscordMessage
 import com.mrpowergamerbr.temmiewebhook.TemmieWebhook
@@ -78,7 +79,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             }
 
             embed.setTitle(configFile.getString("messages.announcement-on")!!)
-            embed.setColor(Color.getColor(Colors.valueOf(configFile.getString("messages.color-on")!!).getNM()))
+            embed.setColor(handleColor(Colors.valueOf(configFile.getString("messages.color-on")!!)))
 
             jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
                 .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
@@ -102,7 +103,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         }
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-on")!!)
-            .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
+            .color(valueOf(configFile.getString("messages.color-on")!!).getColorInt())
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
@@ -121,7 +122,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             }
 
             embed.setTitle(configFile.getString("messages.announcement-off")!!)
-            embed.setColor(Color.getColor(Colors.valueOf(configFile.getString("messages.color-off")!!).getNM()))
+            embed.setColor(handleColor(Colors.valueOf(configFile.getString("messages.color-off")!!)))
             jda?.getGuildById(configFile.getString("discord.bot.server-id")!!)
                 ?.getTextChannelById(configFile.getString("discord.bot.channel-id")!!)
                 ?.sendMessageEmbeds(embed.build())!!.queue()
@@ -144,8 +145,8 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
                 .build())
         }
         val embed = DiscordEmbed.builder()
-             .title(configFile.getString("messages.announcement-off")!!)
-            .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
+            .title(configFile.getString("messages.announcement-off")!!)
+            .color(valueOf(configFile.getString("messages.color-off")!!).getColorInt())
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
@@ -154,25 +155,30 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             .build()
         webhook.sendMessage(message)
     }
+
+    private fun handleColor(color: Colors): Color {
+        return when (color) {
+            GREEN -> Color.GREEN
+            RED -> Color.RED
+            BLUE -> Color.BLUE
+            YELLOW -> Color.YELLOW
+            ORANGE -> Color.ORANGE
+            PINK -> Color.PINK
+            MAGENTA -> Color.MAGENTA
+        }
+    }
 }
 
-enum class Colors(private val value: Int, private val nm: String) {
-    GREEN(65280, "#00FF00"),
-    RED(16711680, "#FF0000"),
-    BLUE(24539, "#0000FF"),
-    YELLOW(16776960, "#FFFF00"),
-    PURPLE(11403519, "#800080"),
-    ORANGE(16756224, "#FF7F00"),
-    PINK(16761035, "#FFC0CB"),
-    LIME(7864064, "#BFFF00"),
-    MAGENTA(16711935, "#FF00FF"),
-    GOLD(13938487, "#D4AF37");
+enum class Colors(private val value: Int) {
+    GREEN(65280),
+    RED(16711680),
+    BLUE(24539),
+    YELLOW(16776960),
+    ORANGE(16756224),
+    PINK(16761035),
+    MAGENTA(16711935);
 
     fun getColorInt(): Int {
         return value
-    }
-
-    fun getNM(): String {
-        return nm
     }
 }
