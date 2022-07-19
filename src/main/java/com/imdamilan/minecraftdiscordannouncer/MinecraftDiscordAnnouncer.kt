@@ -42,6 +42,8 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         configFile.addDefault("discord.webhook.url", "")
         configFile.addDefault("discord.webhook.username", "")
         configFile.addDefault("discord.webhook.avatar", "")
+        configFile.addDefault("messages.color-on", "GREEN")
+        configFile.addDefault("messages.color-off", "RED")
         configFile.addDefault("messages.announcement-on", "SERVER ON!")
         configFile.addDefault("messages.announcement-off", "SERVER OFF!")
         config.options().copyDefaults(true)
@@ -57,7 +59,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
 
             jda!!.awaitReady()
             embed.setTitle(configFile.getString("messages.announcement-on")!!)
-            embed.setColor(Color.GREEN)
+            embed.setColor(Color.getColor(configFile.getString("messages.color-on")!!))
 
             jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
                 .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
@@ -74,7 +76,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-on")!!)
-            .color(65280)
+            .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
@@ -87,7 +89,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
     private fun disableBot() {
         try {
             embed.setTitle(configFile.getString("messages.announcement-off")!!)
-            embed.setColor(Color.RED)
+            embed.setColor(Color.getColor(configFile.getString("messages.color-off")!!))
 
             jda?.getGuildById(configFile.getString("discord.bot.server-id")!!)
                 ?.getTextChannelById(configFile.getString("discord.bot.channel-id")!!)
@@ -105,7 +107,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-off")!!)
-            .color(16711680)
+            .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
             .build()
         val message = DiscordMessage.builder()
             .embeds(listOf(embed))
@@ -113,5 +115,22 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
             .build()
         webhook.sendMessage(message)
+    }
+}
+
+enum class Colors(private val value: Int) {
+    GREEN(65280),
+    RED(16711680),
+    BLUE(24539),
+    YELLOW(16776960),
+    PURPLE(11403519),
+    ORANGE(16756224),
+    PINK(16761035),
+    LIME(7864064),
+    MAGENTA(16711935),
+    GOLD(13938487);
+
+    fun getColorInt(): Int {
+        return value
     }
 }
