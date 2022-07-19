@@ -24,6 +24,10 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         initConfig()
         if (configFile.getBoolean("discord.bot.enabled")) initBot()
         if (configFile.getBoolean("discord.webhook.enabled")) initWebhook()
+        if (!Update.isLatest(this, 103419)) {
+            if (configFile.getBoolean("autoupdate.enabled")) Update.updatePlugin(this, 103419)
+            else logger.warning("You are using an outdated version of the plugin. Please update it to the latest version.")
+        }
     }
 
     override fun onDisable() {
@@ -46,6 +50,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         configFile.addDefault("messages.color-off", "RED")
         configFile.addDefault("messages.announcement-on", "SERVER ON!")
         configFile.addDefault("messages.announcement-off", "SERVER OFF!")
+        configFile.addDefault("autoupdate.enabled", false)
         config.options().copyDefaults(true)
         saveConfig()
     }
