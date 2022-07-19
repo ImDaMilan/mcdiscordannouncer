@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.internal.entities.EntityBuilder
 import org.bstats.bukkit.Metrics
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.awt.Color
 
@@ -55,9 +56,9 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         configFile.addDefault("messages.announcement-on", "SERVER ON!")
         configFile.addDefault("messages.announcement-off", "SERVER OFF!")
         configFile.addDefault("messages.mention-role.serverup.enabled", false)
-        configFile.addDefault("messages.mention-role.serverup.role", "")
+        configFile.addDefault("messages.mention-role.serverup.role-id", "")
         configFile.addDefault("messages.mention-role.serverdown.enabled", false)
-        configFile.addDefault("messages.mention-role.serverdown.role", "")
+        configFile.addDefault("messages.mention-role.serverdown.role-id", "")
         configFile.addDefault("autoupdate.enabled", false)
         config.options().copyDefaults(true)
         saveConfig()
@@ -74,7 +75,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             if (configFile.getBoolean("messages.mention-role.serverup.enabled")) {
                 jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
                     .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
-                    .sendMessage("@${configFile.getString("messages.mention-role.serverup.role")}").queue()
+                    .sendMessage("<@&${configFile.getString("messages.mention-role.serverup.role-id")}>").queue()
             }
 
             embed.setTitle(configFile.getString("messages.announcement-on")!!)
@@ -95,21 +96,23 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         if (configFile.getBoolean("messages.mention-role.serverup.enabled")) {
             webhook.sendMessage(DiscordMessage.builder()
-                .content("@${configFile.getString("messages.mention-role.serverup.role")}")
+                .content("<@&${configFile.getString("messages.mention-role.serverup.role-id")}>")
                 .username(configFile.getString("discord.webhook.username")!!)
                 .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
                 .build())
         }
-        val embed = DiscordEmbed.builder()
-            .title(configFile.getString("messages.announcement-on")!!)
-            .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
-            .build()
-        val message = DiscordMessage.builder()
-            .embeds(listOf(embed))
-            .username(configFile.getString("discord.webhook.username")!!)
-            .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
-            .build()
-        webhook.sendMessage(message)
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, {
+            val embed = DiscordEmbed.builder()
+                .title(configFile.getString("messages.announcement-on")!!)
+                .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
+                .build()
+            val message = DiscordMessage.builder()
+                .embeds(listOf(embed))
+                .username(configFile.getString("discord.webhook.username")!!)
+                .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
+                .build()
+            webhook.sendMessage(message)
+        }, 15L)
     }
 
     private fun disableBot() {
@@ -117,12 +120,11 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             if (configFile.getBoolean("messages.mention-role.serverdown.enabled")) {
                 jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
                     .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
-                    .sendMessage("@${configFile.getString("messages.mention-role.serverdown.role")}").queue()
+                    .sendMessage("<@&${configFile.getString("messages.mention-role.serverdown.role-id")}>").queue()
             }
 
             embed.setTitle(configFile.getString("messages.announcement-off")!!)
-            embed.setColor(Color.getColor(configFile.getString("messages.color-off")!!))
-
+            embed.setColor(Color.GREEN)
             jda?.getGuildById(configFile.getString("discord.bot.server-id")!!)
                 ?.getTextChannelById(configFile.getString("discord.bot.channel-id")!!)
                 ?.sendMessageEmbeds(embed.build())!!.queue()
@@ -139,21 +141,23 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
         if (configFile.getBoolean("messages.mention-role.serverdown.enabled")) {
             webhook.sendMessage(DiscordMessage.builder()
-                .content("@${configFile.getString("messages.mention-role.serverdown.role")}")
+                .content("<@&${configFile.getString("messages.mention-role.serverdown.role-id")}>")
                 .username(configFile.getString("discord.webhook.username")!!)
                 .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
                 .build())
         }
-        val embed = DiscordEmbed.builder()
-            .title(configFile.getString("messages.announcement-off")!!)
-            .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
-            .build()
-        val message = DiscordMessage.builder()
-            .embeds(listOf(embed))
-            .username(configFile.getString("discord.webhook.username")!!)
-            .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
-            .build()
-        webhook.sendMessage(message)
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, {
+            val embed = DiscordEmbed.builder()
+                .title(configFile.getString("messages.announcement-off")!!)
+                .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())
+                .build()
+            val message = DiscordMessage.builder()
+                .embeds(listOf(embed))
+                .username(configFile.getString("discord.webhook.username")!!)
+                .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
+                .build()
+            webhook.sendMessage(message)
+        }, 15L)
     }
 }
 
