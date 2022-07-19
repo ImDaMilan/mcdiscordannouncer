@@ -4,7 +4,7 @@
   <groupId>com.imdamilan</groupId>
   <artifactId>MinecraftDiscordAnnouncer</artifactId>
   <name>MinecraftDiscordAnnouncer</name>
-  <version>0.3</version>
+  <version>1.0</version>
   <description>A plugin that announces when a Minecraft server turns on/off inside a Discord server!</description>
   <build>
     <resources>

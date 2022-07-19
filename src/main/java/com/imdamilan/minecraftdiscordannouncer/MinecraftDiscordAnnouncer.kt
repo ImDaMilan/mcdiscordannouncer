@@ -93,6 +93,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
 
     private fun initWebhook() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
+        webhook.sendMessage(DiscordMessage.builder().content("@${configFile.getBoolean("messages.mention-role.serverup.role")}").build())
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-on")!!)
             .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
@@ -130,6 +131,7 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
 
     private fun disableWebhook() {
         val webhook = TemmieWebhook(configFile.getString("discord.webhook.url")!!)
+        webhook.sendMessage(DiscordMessage.builder().content("@${configFile.getBoolean("messages.mention-role.serverdown.role")}").build())
         val embed = DiscordEmbed.builder()
             .title(configFile.getString("messages.announcement-off")!!)
             .color(Colors.valueOf(configFile.getString("messages.color-off")!!).getColorInt())

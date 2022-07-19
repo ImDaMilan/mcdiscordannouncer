@@ -1,5 +1,5 @@
 name: MinecraftDiscordAnnouncer
-version: '0.3'
+version: '1.0'
 main: com.imdamilan.minecraftdiscordannouncer.MinecraftDiscordAnnouncer
 api-version: 1.16
 authors: [ ImDaMilan ]
