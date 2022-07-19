@@ -101,18 +101,16 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
                 .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
                 .build())
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, {
-            val embed = DiscordEmbed.builder()
-                .title(configFile.getString("messages.announcement-on")!!)
-                .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
-                .build()
-            val message = DiscordMessage.builder()
-                .embeds(listOf(embed))
-                .username(configFile.getString("discord.webhook.username")!!)
-                .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
-                .build()
-            webhook.sendMessage(message)
-        }, 15L)
+        val embed = DiscordEmbed.builder()
+            .title(configFile.getString("messages.announcement-on")!!)
+            .color(Colors.valueOf(configFile.getString("messages.color-on")!!).getColorInt())
+            .build()
+        val message = DiscordMessage.builder()
+            .embeds(listOf(embed))
+            .username(configFile.getString("discord.webhook.username")!!)
+            .avatarUrl(configFile.getString("discord.webhook.avatar")!!)
+            .build()
+        webhook.sendMessage(message)
     }
 
     private fun disableBot() {
