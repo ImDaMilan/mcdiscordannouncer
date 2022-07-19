@@ -6,7 +6,7 @@
 
     <groupId>com.imdamilan</groupId>
     <artifactId>MinecraftDiscordAnnouncer</artifactId>
-    <version>0.3</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>MinecraftDiscordAnnouncer</name>

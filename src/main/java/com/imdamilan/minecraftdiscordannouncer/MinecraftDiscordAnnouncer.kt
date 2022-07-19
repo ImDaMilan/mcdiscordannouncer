@@ -24,15 +24,19 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         initConfig()
         if (configFile.getBoolean("discord.bot.enabled")) initBot()
         if (configFile.getBoolean("discord.webhook.enabled")) initWebhook()
-        if (!Update.isLatest(this, 103419)) {
-            if (configFile.getBoolean("autoupdate.enabled")) Update.updatePlugin(this, 103419)
-            else logger.warning("You are using an outdated version of the plugin. Please update it to the latest version.")
-        }
+        update()
     }
 
     override fun onDisable() {
         if (configFile.getBoolean("discord.bot.enabled")) disableBot()
         if (configFile.getBoolean("discord.webhook.enabled")) disableWebhook()
+    }
+
+    private fun update() {
+        if (!Update.isLatest(this, 103419)) {
+            if (configFile.getBoolean("autoupdate.enabled")) Update.updatePlugin(this, 103419)
+            else logger.warning("You are using an outdated version of the plugin. Please update it to the latest version.")
+        }
     }
 
     private fun initConfig() {
@@ -50,6 +54,10 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
         configFile.addDefault("messages.color-off", "RED")
         configFile.addDefault("messages.announcement-on", "SERVER ON!")
         configFile.addDefault("messages.announcement-off", "SERVER OFF!")
+        configFile.addDefault("messages.mention-role.serverup.enabled", false)
+        configFile.addDefault("messages.mention-role.serverup.role", "")
+        configFile.addDefault("messages.mention-role.serverdown.enabled", false)
+        configFile.addDefault("messages.mention-role.serverdown.role", "")
         configFile.addDefault("autoupdate.enabled", false)
         config.options().copyDefaults(true)
         saveConfig()
@@ -63,6 +71,12 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
             jda!!.presence.setStatus(OnlineStatus.ONLINE)
 
             jda!!.awaitReady()
+            if (configFile.getBoolean("messages.mention-role.serverup.enabled")) {
+                jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
+                    .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
+                    .sendMessage("@${configFile.getBoolean("messages.mention-role.serverup.role")}").queue()
+            }
+
             embed.setTitle(configFile.getString("messages.announcement-on")!!)
             embed.setColor(Color.getColor(configFile.getString("messages.color-on")!!))
 
@@ -93,6 +107,12 @@ class MinecraftDiscordAnnouncer : JavaPlugin() {
 
     private fun disableBot() {
         try {
+            if (configFile.getBoolean("messages.mention-role.serverdown.enabled")) {
+                jda!!.getGuildById(configFile.getString("discord.bot.server-id")!!)!!
+                    .getTextChannelById(configFile.getString("discord.bot.channel-id")!!)!!
+                    .sendMessage("@${configFile.getBoolean("messages.mention-role.serverdown.role")}").queue()
+            }
+
             embed.setTitle(configFile.getString("messages.announcement-off")!!)
             embed.setColor(Color.getColor(configFile.getString("messages.color-off")!!))
 
